@@ -57,5 +57,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void ExitSystem (View view) {
+        finish(); // Đóng Activity hiện tại
     }
 }
