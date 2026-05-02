@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">K224112E</string>
+    <string name="str_welcome">Welcome to K224112E</string>
+    <string name="str_say_hello">Welcome to K224112E</string>
+    <string name="str_clickme_to_say_hello">Say Hello1</string>
+    <string name="str_login_system">Login System</string>
+    <string name="str_username">UserName</string>
+    <string name="str_hint_username">Enter your username</string>
+    <string name="str_login">Login</string>
+    <string name="str_exit">Exit</string>
+    <string name="str_password">Password</string>
+    <string name="str_hint_password">Enter your Password</string>
+    <string name="str_login_success">Login successfully!!</string>
+    <string name="str_login_failed">Login failed!!</string>
+</resources>

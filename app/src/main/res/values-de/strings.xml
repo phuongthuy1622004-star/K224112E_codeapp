@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">K224112E</string>
+    <string name="str_welcome">Willkommen bei K224112E</string>
+    <string name="str_say_hello">GutenTag K224112E</string>
+    <string name="str_clickme_to_say_hello">Hallo sagen</string>
+</resources>
