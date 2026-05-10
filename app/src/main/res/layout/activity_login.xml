@@ -29,6 +29,7 @@
         android:textSize="20sp" />
 
     <EditText
+        android:text="admin"
         android:id="@+id/edtUserName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -46,12 +47,49 @@
         android:textSize="20sp" />
 
     <EditText
+        android:text="123"
         android:id="@+id/edtPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/str_hint_password"
         android:inputType="textPassword" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/str_login_role" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radAdmin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/str_role_admin4" />
+
+            <RadioButton
+                android:id="@+id/radEmployee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/str_role_employee" />
+        </LinearLayout>
+
+    </RadioGroup>
+
+    <CheckBox
+        android:id="@+id/chkSaveLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/str_save_login_info" />
 
     <LinearLayout
         android:layout_width="match_parent"
