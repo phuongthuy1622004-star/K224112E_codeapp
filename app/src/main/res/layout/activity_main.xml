@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/lvEmployee"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -18,7 +18,7 @@
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/txtWelcome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Welcome K234112E"
@@ -60,6 +60,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/str_open_calculator_app" />
+
+            <Button
+                android:id="@+id/button4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/str_sms_spy"
+                android:onClick="sms_spy_ware"/>
+
+            <Button
+                android:onClick="open_multi_threading"
+                android:id="@+id/button5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/str_multi_threading1" />
+
+            <Button
+                android:onClick="open_multi_threading_object"
+                android:id="@+id/button7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/str_multithreading_object" />
         </LinearLayout>
     </ScrollView>
 

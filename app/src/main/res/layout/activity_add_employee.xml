@@ -2,40 +2,39 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/lvEmployee"
-    android:layout_width="wrap_content"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".EmployeeManagementActivity">
+    tools:context=".AddEmployeeActivity">
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/textView14"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/str_employee_id1" />
+        android:text="@string/str_employee_id" />
 
     <EditText
-        android:id="@+id/edtId"
+        android:id="@+id/edtEmpId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="text" />
 
     <TextView
-        android:id="@+id/textView8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/str_employee_name" />
 
     <EditText
-        android:id="@+id/edtName"
+        android:id="@+id/edtEmpName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="text" />
 
     <TextView
-        android:id="@+id/textView9"
+        android:id="@+id/textView17"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/str_phone_number" />
@@ -45,39 +44,37 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="phone" />
+        android:inputType="text" />
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/str_birth_place" />
+
+    <AutoCompleteTextView
+        android:completionThreshold="1"
+        android:id="@+id/actBirthplace"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
-            android:onClick="saveEmployee"
-            android:id="@+id/btnSave"
+        <ImageView
+            android:id="@+id/imgSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/str_save" />
+            android:layout_weight="1"
+            app:srcCompat="@mipmap/ic_save" />
 
-        <Button
-            android:onClick="removeEmployee"
-            android:id="@+id/btnDel"
+        <ImageView
+            android:id="@+id/imgCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/str_del" />
-
-        <Button
-            android:id="@+id/btnExit"
-            android:layout_width="239dp"
-            android:layout_height="wrap_content"
-            android:text="@string/str_exit" />
-
+            android:layout_weight="1"
+            app:srcCompat="@mipmap/ic_cancel" />
     </LinearLayout>
-
-    <ListView
-        android:id="@+id/lvEmployee"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:listSelector="@color/yellow" />
-
 </LinearLayout>

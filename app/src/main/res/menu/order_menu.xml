@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/mnu_all_status_order"
+        android:title="@string/str_order_all_status" />
+    <item
+        android:id="@+id/mnu_completed_order"
+        android:title="@string/str_order_status_completed" />
+    <item
+        android:id="@+id/mnu_notyet_payment"
+        android:title="@string/str_order_status_not_yetpayment" />
+    <item
+        android:id="@+id/mnu_going_logistic"
+        android:title="@string/str_order_status_going_logistic" />
+    <item
+        android:id="@+id/mnu_customer_complain"
+        android:title="@string/str_order_status_customer_angry" />
+</menu>

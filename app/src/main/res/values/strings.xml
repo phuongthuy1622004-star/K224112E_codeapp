@@ -23,8 +23,83 @@
     <string name="str_login_role">Login Role</string>
     <string name="str_role_employee">Employee</string>
     <string name="str_role_admin4">Admin</string>
-    <string name="str_confirm_exit">Confirm Exit</string>
+    <string name="str_confirm_exit">Are you sure you want to exit?</string>
     <string name="str_out">REALLY?</string>
     <string name="str_co">YES</string>
     <string name="str_khong">NO</string>
+    <string name="str_employee_id">Employee id:</string>
+    <string name="str_employee_name">Employee name:</string>
+    <string name="str_employee_id1">Employee id:</string>
+    <string name="str_phone_number">Phone Number</string>
+    <string name="str_save">Save</string>
+    <string name="str_del">Del</string>
+    <string name="str_department">Department</string>
+    <string name="str_employee">List of Employee</string>
+    <string name="str_birth_place">Birthplace</string>
+    <string name="str_order_report">Order Report</string>
+    <string name="str_from_date">From date</string>
+    <string name="str_to_date">To date</string>
+    <string name="str_order_all_status">All Status Order</string>
+    <string name="str_order_status_completed">Completed Order</string>
+    <string name="str_order_status_not_yetpayment">Notyet Payment Order</string>
+    <string name="str_order_status_going_logistic">Going Logistic Order</string>
+    <string name="str_order_status_customer_angry">Customer Angry Order\n</string>
+    <string name="str_category_statistics">Category Statistics</string>
+    <string name="str_new_category">New Category</string>
+    <string name="str_category_id">Category ID\n</string>
+    <string name="str_category_name">Category Name\n</string>
+    <string name="str_category_desc">Descriptions</string>
+    <string name="str_cancel">CANCEL\n</string>
+    <string name="str_category_new">New Category</string>
+    <string name="str_phone">Phone:</string>
+    <string name="str_time">Time:</string>
+    <string name="str_message_body1">Message:</string>
+    <string name="str_sms_spy">SMSSpyWare</string>
+    <string name="str_number_button">Number of Button</string>
+    <string name="str_create_button">CREATE BUTTON</string>
+    <string name="str_multi_threading1">Open Multi Threading</string>
+    <string name="str_number_product">Number Product</string>
+    <string name="str_download_product">Download Product</string>
+    <string name="str_multithreading_object">MultiThreadingObject</string>
+    <string-array name="list_birthplace">
+        <item>An Giang</item>
+        <item>Bắc Thái</item>
+        <item>Bến Tre</item>
+        <item>Bình Trị Thiên</item>
+        <item>Cao Lạng</item>
+        <item>Cửu Long</item>
+        <item>Đắk Lắk</item>
+        <item>Đặc khu Vũng Tàu - Côn Đảo</item>
+        <item>Đồng Nai</item>
+        <item>Đồng Tháp</item>
+        <item>Gia Lai - Kon Tum</item>
+        <item>Hà Bắc</item>
+        <item>Hà Nam Ninh</item>
+        <item>Hà Nội</item>
+        <item>Hải Hưng</item>
+        <item>Hải Phòng</item>
+        <item>Hà Sơn Bình</item>
+        <item>Hà Tuyên</item>
+        <item>Hậu Giang</item>
+        <item>Hoàng Liên Sơn</item>
+        <item>Kiên Giang</item>
+        <item>Lai Châu</item>
+        <item>Lâm Đồng</item>
+        <item>Long An</item>
+        <item>Minh Hải</item>
+        <item>Nghệ Tĩnh</item>
+        <item>Nghĩa Bình</item>
+        <item>Phú Khánh</item>
+        <item>Quảng Nam - Đà Nẵng</item>
+        <item>Quảng Ninh</item>
+        <item>Sông Bé</item>
+        <item>Sơn La</item>
+        <item>Tây Ninh</item>
+        <item>Thái Bình</item>
+        <item>Thanh Hóa</item>
+        <item>Tiền Giang</item>
+        <item>TP Hồ Chí Minh</item>
+        <item>Thuận Hải</item>
+        <item>Vĩnh Phú</item>
+    </string-array>
 </resources>
