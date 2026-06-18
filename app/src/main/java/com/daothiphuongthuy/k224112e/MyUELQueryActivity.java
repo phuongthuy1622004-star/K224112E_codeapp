@@ -160,24 +160,40 @@ public class MyUELQueryActivity extends AppCompatActivity {
         List<String> vocabList = new ArrayList<>(vocabulary);
         double[] queryVector = buildVector(queryWords, vocabList);
 
-        double maxSimilarity = -1;
+        double minDistance = Double.MAX_VALUE;
         Major bestMajor = null;
-        StringBuilder scoreLog = new StringBuilder();
 
         for (Major m : majors) {
             double[] majorVector = buildVector(m.keywords, vocabList);
-            double cosSim = cosineSimilarity(queryVector, majorVector);
-            
-            if (cosSim > maxSimilarity) {
-                maxSimilarity = cosSim;
+            double dist = euclideanDistance(queryVector, majorVector);
+
+            if (dist < minDistance) {
+                minDistance = dist;
                 bestMajor = m;
             }
         }
 
-        if (maxSimilarity <= 0) return null;
+        // Logic kiểm tra xem có ít nhất một từ trùng khớp không (tránh trả về kết quả ngẫu nhiên)
+        boolean hasOverlap = false;
+        for (String qw : queryWords) {
+            for (Major m : majors) {
+                for (String kw : m.keywords) {
+                    if (qw.equals(kw)) {
+                        hasOverlap = true;
+                        break;
+                    }
+                }
+                if (hasOverlap) break;
+            }
+            if (hasOverlap) break;
+        }
 
-        txtStatus.setText("Ngành khớp nhất: " + bestMajor.name + " (Độ tương đồng: " + String.format("%.2f", maxSimilarity) + ")");
-        return bestMajor;
+        if (hasOverlap && bestMajor != null) {
+            txtStatus.setText("Ngành khớp nhất: " + bestMajor.name + " (Khoảng cách Euclides: " + String.format("%.2f", minDistance) + ")");
+            return bestMajor;
+        }
+
+        return null;
     }
 
     private double[] buildVector(String[] words, List<String> vocabulary) {
@@ -190,15 +206,12 @@ public class MyUELQueryActivity extends AppCompatActivity {
         return vector;
     }
 
-    private double cosineSimilarity(double[] v1, double[] v2) {
-        double dotProduct = 0.0, norm1 = 0.0, norm2 = 0.0;
+    private double euclideanDistance(double[] v1, double[] v2) {
+        double sum = 0.0;
         for (int i = 0; i < v1.length; i++) {
-            dotProduct += v1[i] * v2[i];
-            norm1 += v1[i] * v1[i];
-            norm2 += v2[i] * v2[i];
+            sum += Math.pow(v1[i] - v2[i], 2);
         }
-        if (norm1 == 0 || norm2 == 0) return 0;
-        return dotProduct / (Math.sqrt(norm1) * Math.sqrt(norm2));
+        return Math.sqrt(sum);
     }
 
     private class FetchDataTask extends AsyncTask<Void, Void, ArrayList<CurriculumSubject>> {
