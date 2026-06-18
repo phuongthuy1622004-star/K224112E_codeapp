@@ -5,4 +5,7 @@
     <color name="yellow">#FFFF00</color>
     <color name="red">#FF5722</color>
     <color name="pink">#A7E91E63</color>
+    <color name="purple_500">#6200EE</color>
+    <color name="purple_200">#BB86FC</color>
+    <color name="gray_100">#F5F5F5</color>
 </resources>

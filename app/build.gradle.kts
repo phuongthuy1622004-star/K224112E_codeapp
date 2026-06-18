@@ -4,16 +4,12 @@ plugins {
 
 android {
     namespace = "com.daothiphuongthuy.k224112e"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.daothiphuongthuy.k224112e"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -45,9 +41,10 @@ dependencies {
     implementation(libs.material)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
+    implementation("androidx.cardview:cardview:1.0.0")
+    implementation("org.jsoup:jsoup:1.17.2")
+    implementation("net.objecthunter:exp4j:0.4.8")
     testImplementation(libs.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.ext.junit)
-    implementation("net.objecthunter:exp4j:0.4.8")  // thêm dòng này
-    implementation("org.jsoup:jsoup:1.17.2")
 }

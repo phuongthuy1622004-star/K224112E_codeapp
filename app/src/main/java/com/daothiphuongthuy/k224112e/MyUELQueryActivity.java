@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +17,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.daothiphuongthuy.adapter.CurriculumAdapter;
+import com.daothiphuongthuy.models.CurriculumSubject;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -31,7 +34,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -41,7 +43,11 @@ public class MyUELQueryActivity extends AppCompatActivity {
 
     EditText editTextText;
     Button buttonVoice, buttonGetData;
-    TextView textViewResult;
+    TextView txtStatus;
+    ListView lvCurriculum;
+    
+    CurriculumAdapter adapter;
+    ArrayList<CurriculumSubject> subjectList;
 
     private static class Major {
         String name;
@@ -90,8 +96,12 @@ public class MyUELQueryActivity extends AppCompatActivity {
         editTextText = findViewById(R.id.editTextText);
         buttonVoice = findViewById(R.id.button9);
         buttonGetData = findViewById(R.id.button10);
-        textViewResult = findViewById(R.id.textView23);
-        textViewResult.setMovementMethod(new ScrollingMovementMethod());
+        txtStatus = findViewById(R.id.txtStatus);
+        lvCurriculum = findViewById(R.id.lvCurriculum);
+        
+        subjectList = new ArrayList<>();
+        adapter = new CurriculumAdapter(this, R.layout.item_curriculum, subjectList);
+        lvCurriculum.setAdapter(adapter);
     }
 
     private void addEvents() {
@@ -135,10 +145,7 @@ public class MyUELQueryActivity extends AppCompatActivity {
         if (bestMatch != null) {
             new FetchDataTask(bestMatch).execute();
         } else {
-            textViewResult.setText("Không tìm thấy kết quả phù hợp. Các link tham khảo:\n" +
-                    "1. Thương mại điện tử: https://myuel.uel.edu.vn/...\n" +
-                    "2. Hệ thống thông tin quản lý: https://myuel.uel.edu.vn/...\n" +
-                    "3. Kinh doanh số: https://myuel.uel.edu.vn/...");
+            txtStatus.setText("Không tìm thấy kết quả phù hợp.");
         }
     }
 
@@ -160,13 +167,7 @@ public class MyUELQueryActivity extends AppCompatActivity {
         for (Major m : majors) {
             double[] majorVector = buildVector(m.keywords, vocabList);
             double cosSim = cosineSimilarity(queryVector, majorVector);
-            double eucDist = euclideanDistance(queryVector, majorVector);
-
-            scoreLog.append(m.name).append(":\n")
-                    .append("- Cosine Similarity: ").append(String.format("%.4f", cosSim))
-                    .append("\n- Euclidean Distance: ").append(String.format("%.4f", eucDist))
-                    .append("\n\n");
-
+            
             if (cosSim > maxSimilarity) {
                 maxSimilarity = cosSim;
                 bestMajor = m;
@@ -175,27 +176,22 @@ public class MyUELQueryActivity extends AppCompatActivity {
 
         if (maxSimilarity <= 0) return null;
 
-        textViewResult.setText(scoreLog.toString() + "=> Chọn: " + bestMajor.name + "\n\nĐang tải dữ liệu...");
+        txtStatus.setText("Ngành khớp nhất: " + bestMajor.name + " (Độ tương đồng: " + String.format("%.2f", maxSimilarity) + ")");
         return bestMajor;
     }
 
     private double[] buildVector(String[] words, List<String> vocabulary) {
         double[] vector = new double[vocabulary.size()];
         Map<String, Integer> counts = new HashMap<>();
-        for (String w : words) {
-            counts.put(w, counts.getOrDefault(w, 0) + 1);
-        }
+        for (String w : words) counts.put(w, counts.getOrDefault(w, 0) + 1);
         for (int i = 0; i < vocabulary.size(); i++) {
-            String word = vocabulary.get(i);
-            vector[i] = counts.getOrDefault(word, 0);
+            vector[i] = counts.getOrDefault(vocabulary.get(i), 0);
         }
         return vector;
     }
 
     private double cosineSimilarity(double[] v1, double[] v2) {
-        double dotProduct = 0.0;
-        double norm1 = 0.0;
-        double norm2 = 0.0;
+        double dotProduct = 0.0, norm1 = 0.0, norm2 = 0.0;
         for (int i = 0; i < v1.length; i++) {
             dotProduct += v1[i] * v2[i];
             norm1 += v1[i] * v1[i];
@@ -205,81 +201,64 @@ public class MyUELQueryActivity extends AppCompatActivity {
         return dotProduct / (Math.sqrt(norm1) * Math.sqrt(norm2));
     }
 
-    private double euclideanDistance(double[] v1, double[] v2) {
-        double sum = 0.0;
-        for (int i = 0; i < v1.length; i++) {
-            sum += Math.pow(v1[i] - v2[i], 2);
-        }
-        return Math.sqrt(sum);
-    }
-
-    private class FetchDataTask extends AsyncTask<Void, Void, String> {
+    private class FetchDataTask extends AsyncTask<Void, Void, ArrayList<CurriculumSubject>> {
         Major major;
-        String scoreLog;
 
-        FetchDataTask(Major major) {
-            this.major = major;
-            this.scoreLog = textViewResult.getText().toString();
+        FetchDataTask(Major major) { this.major = major; }
+
+        @Override
+        protected void onPreExecute() {
+            txtStatus.setText("Đang tải chương trình đào tạo " + major.name + "...");
+            subjectList.clear();
+            adapter.notifyDataSetChanged();
         }
 
         @Override
-        protected String doInBackground(Void... voids) {
+        protected ArrayList<CurriculumSubject> doInBackground(Void... voids) {
+            ArrayList<CurriculumSubject> results = new ArrayList<>();
             try {
                 URL url = new URL(major.url);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
-                connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestProperty("User-Agent", "Mozilla/5.0");
 
-                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 StringBuilder html = new StringBuilder();
                 String line;
-                while ((line = reader.readLine()) != null) {
-                    html.append(line);
-                }
+                while ((line = reader.readLine()) != null) html.append(line);
                 reader.close();
 
                 Document doc = Jsoup.parse(html.toString());
-                Elements rows = doc.select("table.gridview tr");
-                
-                if (rows.isEmpty()) {
-                    // Try alternative selector if gridview class is not used
-                    rows = doc.select("table tr");
-                }
-
-                StringBuilder result = new StringBuilder();
-                result.append("CHƯƠNG TRÌNH ĐÀO TẠO: ").append(major.name).append("\n\n");
+                Elements rows = doc.select("table.gridview tr, table tr");
                 
                 for (Element row : rows) {
                     Elements cols = row.select("td");
                     if (cols.size() >= 5) {
                         String stt = cols.get(0).text().trim();
-                        String maMon = cols.get(1).text().trim();
-                        String tenMon = cols.get(2).text().trim();
-                        String tinChi = cols.get(3).text().trim();
-                        String hocKy = cols.get(4).text().trim();
+                        String code = cols.get(1).text().trim();
+                        String name = cols.get(2).text().trim();
+                        String credits = cols.get(3).text().trim();
+                        String semester = cols.get(4).text().trim();
                         
-                        if (!stt.isEmpty() && !maMon.isEmpty()) {
-                            result.append(stt).append(". ").append(maMon)
-                                    .append(" - ").append(tenMon)
-                                    .append(" (").append(tinChi).append(" TC) - HK: ").append(hocKy).append("\n");
+                        if (!stt.isEmpty() && !code.isEmpty() && stt.matches("\\d+")) {
+                            results.add(new CurriculumSubject(stt, code, name, credits, semester));
                         }
                     }
                 }
-                
-                if (result.length() < 100) {
-                    return scoreLog + "\nKhông tìm thấy bảng dữ liệu chi tiết trên trang này.";
-                }
-
-                return scoreLog + "\n" + result.toString();
-
             } catch (Exception e) {
-                return "Lỗi khi nạp dữ liệu: " + e.getMessage();
+                e.printStackTrace();
             }
+            return results;
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            textViewResult.setText(s);
+        protected void onPostExecute(ArrayList<CurriculumSubject> results) {
+            if (results.isEmpty()) {
+                txtStatus.setText("Không lấy được dữ liệu. Kiểm tra kết nối mạng.");
+            } else {
+                txtStatus.setText("Tìm thấy " + results.size() + " môn học.");
+                subjectList.addAll(results);
+                adapter.notifyDataSetChanged();
+            }
         }
     }
 }
