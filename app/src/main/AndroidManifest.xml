@@ -28,6 +28,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.K224112E">
         <activity
+            android:name=".MyUELQueryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FontAndMusicActivity"
+            android:exported="false"
+            android:theme="@style/Theme.K224112E" />
+        <activity
             android:name=".EmployeeMultiThreadActivity"
             android:exported="false" />
         <activity
@@ -47,9 +54,6 @@
             android:exported="false" />
         <activity
             android:name=".CategoryNewActivity"
-            android:exported="false" />
-        <activity
-            android:name=".category_custom_item"
             android:exported="false" />
         <activity
             android:name=".CategoryActivity"

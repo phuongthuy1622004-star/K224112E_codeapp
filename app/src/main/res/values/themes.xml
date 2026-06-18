@@ -6,8 +6,7 @@
     </style>
 
 
-    <style name="Base.Theme.K224112EWithActionBar" parent="Theme.Material3.DayNight">
-    </style>
+    <style name="Base.Theme.K224112EWithActionBar" parent="Theme.Material3.DayNight"></style>
 
 
     <style name="Theme.K224112E" parent="Base.Theme.K224112EWithActionBar" />

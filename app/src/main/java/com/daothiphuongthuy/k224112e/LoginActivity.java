@@ -166,7 +166,7 @@ public class LoginActivity extends AppCompatActivity {
                 intent.putExtra("USER_LOGIN", uc);
                 startActivity(intent);
             } else {
-                Intent intent = new Intent(LoginActivity.this, GoldPriceActivity.class);
+                Intent intent = new Intent(LoginActivity.this, MyUELQueryActivity.class);
                 startActivity(intent);
             }
         } else {

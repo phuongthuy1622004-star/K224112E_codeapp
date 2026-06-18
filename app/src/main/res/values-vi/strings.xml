@@ -59,4 +59,7 @@
     <string name="str_number_product">Number Product</string>
     <string name="str_download_product">Download Product</string>
     <string name="str_multithreading_object">MultiThreadingObject</string>
+    <string name="str_play_audio_1">Play audio 1</string>
+    <string name="str_play_audio_2">Play audio 2</string>
+    <string name="str_uel">UEL</string>
 </resources>
