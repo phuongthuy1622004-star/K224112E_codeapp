@@ -30,12 +30,14 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 public class MyUELQueryActivity extends AppCompatActivity {
 
@@ -52,25 +54,20 @@ public class MyUELQueryActivity extends AppCompatActivity {
     private static class Major {
         String name;
         String url;
-        String[] keywords;
 
-        Major(String name, String url, String[] keywords) {
+        Major(String name, String url) {
             this.name = name;
             this.url = url;
-            this.keywords = keywords;
         }
     }
 
     private final Major[] majors = {
             new Major("Thương mại điện tử",
-                    "https://myuel.uel.edu.vn/Default.aspx?ModuleId=f92f39b2-dea3-4185-8cbb-56c1c49c5226&OlogyID=411&DepartmentID=05&GraduateLevelID=DH&StudyTypeID=CQ",
-                    new String[]{"thương", "mại", "điện", "tử", "thuong", "mai", "dien", "tu", "tmdt", "ecommerce", "bán", "hàng", "online", "ban", "hang"}),
+                    "https://myuel.uel.edu.vn/Default.aspx?ModuleId=f92f39b2-dea3-4185-8cbb-56c1c49c5226&OlogyID=411&DepartmentID=05&GraduateLevelID=DH&StudyTypeID=CQ"),
             new Major("Hệ thống thông tin quản lý",
-                    "https://myuel.uel.edu.vn/Default.aspx?ModuleId=f92f39b2-dea3-4185-8cbb-56c1c49c5226&OlogyID=7340405&DepartmentID=05&GraduateLevelID=DH&StudyTypeID=CQ",
-                    new String[]{"hệ", "thống", "thông", "tin", "he", "thong", "thong", "tin", "httt", "quản", "lý", "quan", "ly", "information", "system"}),
+                    "https://myuel.uel.edu.vn/Default.aspx?ModuleId=f92f39b2-dea3-4185-8cbb-56c1c49c5226&OlogyID=7340405&DepartmentID=05&GraduateLevelID=DH&StudyTypeID=CQ"),
             new Major("Kinh doanh số và trí tuệ nhân tạo",
-                    "https://myuel.uel.edu.vn/Default.aspx?ModuleId=f92f39b2-dea3-4185-8cbb-56c1c49c5226&OlogyID=416&DepartmentID=05&GraduateLevelID=DH&StudyTypeID=CQ",
-                    new String[]{"kinh", "doanh", "số", "trí", "tuệ", "nhân", "tạo", "so", "tri", "tue", "nhan", "tao", "ai", "digital", "business", "kds"})
+                    "https://myuel.uel.edu.vn/Default.aspx?ModuleId=f92f39b2-dea3-4185-8cbb-56c1c49c5226&OlogyID=416&DepartmentID=05&GraduateLevelID=DH&StudyTypeID=CQ")
     };
 
     @Override
@@ -150,11 +147,18 @@ public class MyUELQueryActivity extends AppCompatActivity {
     }
 
     private Major findBestMajor(String query) {
-        String[] queryWords = query.split("\\s+");
+        // Chuẩn hóa câu truy vấn: viết thường và bỏ dấu
+        String normalizedQuery = removeAccents(query.toLowerCase());
+        String[] queryWords = normalizedQuery.split("\\s+");
+        
         Set<String> vocabulary = new HashSet<>();
         for (String w : queryWords) vocabulary.add(w);
+        
+        // Chuẩn hóa tên các ngành để tạo từ điển
         for (Major m : majors) {
-            for (String kw : m.keywords) vocabulary.add(kw);
+            String normalizedName = removeAccents(m.name.toLowerCase());
+            String[] nameWords = normalizedName.split("\\s+");
+            for (String nw : nameWords) vocabulary.add(nw);
         }
 
         List<String> vocabList = new ArrayList<>(vocabulary);
@@ -164,7 +168,9 @@ public class MyUELQueryActivity extends AppCompatActivity {
         Major bestMajor = null;
 
         for (Major m : majors) {
-            double[] majorVector = buildVector(m.keywords, vocabList);
+            String normalizedName = removeAccents(m.name.toLowerCase());
+            String[] nameWords = normalizedName.split("\\s+");
+            double[] majorVector = buildVector(nameWords, vocabList);
             double dist = euclideanDistance(queryVector, majorVector);
 
             if (dist < minDistance) {
@@ -173,27 +179,18 @@ public class MyUELQueryActivity extends AppCompatActivity {
             }
         }
 
-        // Logic kiểm tra xem có ít nhất một từ trùng khớp không (tránh trả về kết quả ngẫu nhiên)
-        boolean hasOverlap = false;
-        for (String qw : queryWords) {
-            for (Major m : majors) {
-                for (String kw : m.keywords) {
-                    if (qw.equals(kw)) {
-                        hasOverlap = true;
-                        break;
-                    }
-                }
-                if (hasOverlap) break;
-            }
-            if (hasOverlap) break;
-        }
-
-        if (hasOverlap && bestMajor != null) {
-            txtStatus.setText("Ngành khớp nhất: " + bestMajor.name + " (Khoảng cách Euclides: " + String.format("%.2f", minDistance) + ")");
+        if (bestMajor != null) {
+            txtStatus.setText("Kết quả dựa trên khoảng cách Euclides: " + bestMajor.name + " (" + String.format("%.2f", minDistance) + ")");
             return bestMajor;
         }
 
         return null;
+    }
+
+    private String removeAccents(String s) {
+        String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        return pattern.matcher(temp).replaceAll("").replace('đ', 'd').replace('Đ', 'D');
     }
 
     private double[] buildVector(String[] words, List<String> vocabulary) {
